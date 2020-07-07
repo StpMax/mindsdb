@@ -45,21 +45,21 @@ script:
   #- if [ "$TRAVIS_OS_NAME" != "windows" ]; then travis_wait 15 python3 test_endpoints.py; fi
   - cd ../..
 
-# deploy to pip
-deploy:
-  - provider: pypi
-    user: "mindsdb_sysadmin"
-    password: $PYPI_SYSADMIN_PASSWORD
-    distributions: "sdist"
-    on:
-      branch: stable
-      condition: $DEPLOYMENT_ENV = "true"
+# # deploy to pip
+# deploy:
+#   - provider: pypi
+#     user: "mindsdb_sysadmin"
+#     password: $PYPI_SYSADMIN_PASSWORD
+#     distributions: "sdist"
+#     on:
+#       branch: stable
+#       condition: $DEPLOYMENT_ENV = "true"
 
-# after pip is deployed, we can deploy to dockerhub
-after_deploy:
-  -  if [[ "$DEPLOYMENT_ENV" = "true" && "$TRAVIS_BRANCH" = "stable" ]]; then sleep 15; fi
-  -  if [[ "$DEPLOYMENT_ENV" = "true" && "$TRAVIS_BRANCH" = "stable" ]]; then cd distributions/docker; fi
-  -  if [[ "$DEPLOYMENT_ENV" = "true" && "$TRAVIS_BRANCH" = "stable" ]]; then docker build -t docker-build .; fi
-  -  if [[ "$DEPLOYMENT_ENV" = "true" && "$TRAVIS_BRANCH" = "stable" ]]; then docker tag docker-build $REGISTRY_USER/mindsdb:latest; fi
-  -  if [[ "$DEPLOYMENT_ENV" = "true" && "$TRAVIS_BRANCH" = "stable" ]]; then cd ../..; fi
-  -  if [[ "$DEPLOYMENT_ENV" = "true" && "$TRAVIS_BRANCH" = "stable" ]]; then docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS" && docker push $REGISTRY_USER/mindsdb && docker logout; fi
+# # after pip is deployed, we can deploy to dockerhub
+# after_deploy:
+#   -  if [[ "$DEPLOYMENT_ENV" = "true" && "$TRAVIS_BRANCH" = "stable" ]]; then sleep 15; fi
+#   -  if [[ "$DEPLOYMENT_ENV" = "true" && "$TRAVIS_BRANCH" = "stable" ]]; then cd distributions/docker; fi
+#   -  if [[ "$DEPLOYMENT_ENV" = "true" && "$TRAVIS_BRANCH" = "stable" ]]; then docker build -t docker-build .; fi
+#   -  if [[ "$DEPLOYMENT_ENV" = "true" && "$TRAVIS_BRANCH" = "stable" ]]; then docker tag docker-build $REGISTRY_USER/mindsdb:latest; fi
+#   -  if [[ "$DEPLOYMENT_ENV" = "true" && "$TRAVIS_BRANCH" = "stable" ]]; then cd ../..; fi
+#   -  if [[ "$DEPLOYMENT_ENV" = "true" && "$TRAVIS_BRANCH" = "stable" ]]; then docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS" && docker push $REGISTRY_USER/mindsdb && docker logout; fi
